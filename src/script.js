@@ -173,6 +173,11 @@ const SliderApp = (() => {
     function setupNavigationListeners() {
         elements.prevBtn.addEventListener('click', goToPreviousSlide);
         elements.nextBtn.addEventListener('click', goToNextSlide);
+        
+        // Botões de próximo slide no final do conteúdo (mobile)
+        document.querySelectorAll('.mobile-next-btn').forEach(btn => {
+            btn.addEventListener('click', goToNextSlide);
+        });
     }
 
     /**
@@ -205,12 +210,38 @@ const SliderApp = (() => {
     }
 
     /**
-     * Configura navegação por scroll do mouse (com throttle)
+     * Configura navegação por scroll do mouse (com throttle e detecção de scroll interno)
      */
     function setupWheelNavigation() {
         let scrollTimeout;
+        const SCROLL_SAFEZONE = 800; // pixels de safezone antes de mudar slide
 
         document.addEventListener('wheel', (event) => {
+            // Apenas em desktop (largura > 768px) permite trocar slide por scroll
+            if (window.innerWidth <= 768) {
+                return; // Bloqueia navegação por scroll em mobile
+            }
+
+            // Verifica se há conteúdo scrollável ativo
+            const activeSlide = document.querySelector('.slide.active');
+            const slideContent = activeSlide?.querySelector('.slide-content');
+            
+            if (slideContent) {
+                const { scrollTop, scrollHeight, clientHeight } = slideContent;
+                const isAtTop = scrollTop <= SCROLL_SAFEZONE;
+                const isAtBottom = scrollTop + clientHeight >= scrollHeight - SCROLL_SAFEZONE;
+                
+                // Se está scrollando para baixo mas não está no fim do conteúdo, não muda slide
+                if (event.deltaY > 0 && !isAtBottom) {
+                    return;
+                }
+                
+                // Se está scrollando para cima mas não está no topo do conteúdo, não muda slide
+                if (event.deltaY < 0 && !isAtTop) {
+                    return;
+                }
+            }
+
             clearTimeout(scrollTimeout);
             
             scrollTimeout = setTimeout(() => {
@@ -227,33 +258,60 @@ const SliderApp = (() => {
      * Configura navegação por touch/swipe para mobile
      */
     function setupTouchNavigation() {
+        let touchStartX = 0;
         let touchStartY = 0;
+        let touchEndX = 0;
         let touchEndY = 0;
+        let isSwiping = false;
 
-        document.addEventListener('touchstart', (event) => {
+        const container = document.querySelector('.slider-container');
+
+        container.addEventListener('touchstart', (event) => {
+            // Ignora se o toque for em botões/indicadores
+            if (event.target.closest('.navigation') || event.target.closest('.slide-indicators')) {
+                return;
+            }
+
+            touchStartX = event.changedTouches[0].screenX;
             touchStartY = event.changedTouches[0].screenY;
+            isSwiping = false;
         }, { passive: true });
 
-        document.addEventListener('touchend', (event) => {
+        container.addEventListener('touchmove', (event) => {
+            if (!isSwiping) {
+                isSwiping = true;
+            }
+        }, { passive: true });
+
+        container.addEventListener('touchend', (event) => {
+            if (!isSwiping) return;
+
+            touchEndX = event.changedTouches[0].screenX;
             touchEndY = event.changedTouches[0].screenY;
-            handleSwipe(touchStartY, touchEndY);
+            handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY);
         }, { passive: true });
     }
 
     /**
-     * Processa o gesto de swipe
+     * Processa o gesto de swipe (apenas horizontal em mobile)
+     * @param {number} startX - Posição X inicial
      * @param {number} startY - Posição Y inicial
+     * @param {number} endX - Posição X final
      * @param {number} endY - Posição Y final
      */
-    function handleSwipe(startY, endY) {
-        const diff = startY - endY;
-
-        if (Math.abs(diff) > CONFIG.swipeThreshold) {
-            if (diff > 0) {
-                // Swipe para cima - próximo slide
+    function handleSwipe(startX, startY, endX, endY) {
+        const diffX = startX - endX;
+        const diffY = startY - endY;
+        const absDiffX = Math.abs(diffX);
+        const absDiffY = Math.abs(diffY);
+        
+        // Apenas swipe horizontal em mobile
+        if (absDiffX > absDiffY && absDiffX > CONFIG.swipeThreshold) {
+            if (diffX > 0) {
+                // Swipe para esquerda - próximo slide
                 goToNextSlide();
             } else {
-                // Swipe para baixo - slide anterior
+                // Swipe para direita - slide anterior
                 goToPreviousSlide();
             }
         }
