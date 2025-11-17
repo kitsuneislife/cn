@@ -1,0 +1,704 @@
+/* ==========================================================================
+   VARIÁVEIS CSS - Custom Properties
+   ========================================================================== */
+
+:root {
+    /* Cores do Slide 1 - Azul */
+    --slide-1-primary: #0370dc;
+    --slide-1-secondary: #008cff;
+    --slide-1-text: #333;
+
+    /* Cores do Slide 2 - Rosa */
+    --slide-2-light: #f943ad;
+    --slide-2-medium: #ed1d8c;
+    --slide-2-dark: #ff95cf;
+
+    /* Cores do Slide 3 - Laranja/Amarelo */
+    --slide-3-primary: #FFB11E;
+    --slide-3-secondary: #EED532;
+
+    /* Cores do Slide 4 - Vermelho */
+    --slide-4-primary: #FF0000;
+    --slide-4-secondary: #FA4E3A;
+
+    /* Cores do Slide 5 - Rosa pastel */
+    --slide-5-primary: #EDAABB;
+    --slide-5-secondary: #DF9097;
+
+    /* Cores do Slide 6 - Turquesa */
+    --slide-6-primary: #33E6ED;
+    --slide-6-secondary: #11D5E5;
+
+    /* Cores do Slide 7 - Verde */
+    --slide-7-primary: #47EDBC;
+    --slide-7-secondary: #15E5AF;
+
+    /* Configurações de animação */
+    --transition-duration: 0.6s;
+    --transition-easing: ease;
+    --animation-slideup-duration: 0.8s;
+
+    /* Tamanhos */
+    --nav-btn-size: 36px;
+    --indicator-size: 8px;
+    --indicator-active-width: 28px;
+}
+
+/* ==========================================================================
+   RESET E CONFIGURAÇÕES GLOBAIS
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    line-height: 1.6;
+}
+
+/* Classe helper para acessibilidade */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ==========================================================================
+   CONTAINER E ESTRUTURA BASE DO SLIDER
+   ========================================================================== */
+
+/* Container principal do slider */
+.slider-container {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   SLIDES - Estilo Base
+   ========================================================================== */
+
+.slide {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-duration) var(--transition-easing), 
+                visibility var(--transition-duration) var(--transition-easing);
+}
+
+.slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   SIDEBAR E MARQUEE
+   ========================================================================== */
+
+.slide-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100vh;
+    background-color: #000;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide-marquee {
+    transform: rotate(-90deg) translateX(-50%);
+    transform-origin: left center;
+    width: 100vh;
+    position: absolute;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.marquee-track {
+    display: inline-block;
+    animation: scroll 30s linear infinite;
+}
+
+.slide-marquee-reverse .marquee-track {
+    animation: scroll-reverse 30s linear infinite;
+}
+
+.slide-marquee span {
+    color: white;
+    font-size: 108px;
+    font-weight: bold;
+}
+
+@keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+@keyframes scroll-reverse {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+}
+
+/* ==========================================================================
+   CONTEÚDO DOS SLIDES
+   ========================================================================== */
+
+/* Container de conteúdo centralizado */
+.slide-content {
+    text-align: center;
+    padding: 2rem;
+    max-width: 800px;
+    animation: slideUp var(--animation-slideup-duration) ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content-container {
+    position: absolute;
+    top: 13%;
+    left: 52%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+/* ==========================================================================
+   TIPOGRAFIA E BOTÕES
+   ========================================================================== */
+
+/* Tipografia */
+.slide h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.slide p {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+/* Botões CTA */
+.cta-button {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-weight: 600;
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Grid de features (Slide 2) */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.feature {
+    padding: 1.5rem;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Lista customizada (Slide 3) */
+.slide-list {
+    list-style: none;
+    text-align: left;
+    display: inline-block;
+    font-size: 1.2rem;
+}
+
+.slide-list li {
+    padding: 0.8rem 0;
+    padding-left: 2rem;
+    position: relative;
+}
+
+.slide-list li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+/* URL do slide para QR Code */
+.slide-url {
+    margin-top: 2rem;
+    opacity: 0.7;
+}
+
+.slide-url code {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+}
+
+/* ==========================================================================
+   ESTILOS INDIVIDUAIS POR SLIDE
+   ========================================================================== */
+
+/* SLIDE 1 - Azul com padrão diagonal (estático para performance) */
+.slide[data-slide="1"] {
+    --cor-primaria: var(--slide-1-primary);
+    --cor-secundaria: var(--slide-1-secondary);
+    --cor-texto: var(--slide-1-text);
+    
+    background:
+        linear-gradient(42deg, var(--cor-primaria) 45px, transparent 45px) 64px 64px,
+        linear-gradient(45deg, var(--cor-primaria) 45px, transparent 45px, transparent 91px, var(--cor-secundaria) 91px, var(--cor-secundaria) 135px, transparent 135px),
+        linear-gradient(-45deg, var(--cor-primaria) 23px, transparent 23px, transparent 68px, var(--cor-primaria) 68px, var(--cor-primaria) 113px, transparent 113px, transparent 158px, var(--cor-primaria) 158px);
+    background-color: var(--cor-secundaria);
+    background-size: 128px 128px;
+    color: var(--cor-texto);
+}
+
+.slide[data-slide="1"] .cta-button {
+    background: white;
+    color: var(--cor-primaria);
+}
+
+/* SLIDE 2 - Rosa com padrão de losangos (estático para performance) */
+.slide[data-slide="2"] {
+    --pink-light: var(--slide-2-light);
+    --pink-medium: var(--slide-2-medium);
+    --pink-dark: var(--slide-2-dark);
+
+    background:
+        linear-gradient(135deg, var(--pink-light) 25%, transparent 25%) -50px 0,
+        linear-gradient(225deg, var(--pink-light) 25%, transparent 25%) -50px 0,
+        linear-gradient(315deg, rgba(255, 131, 200, 0.12) 25%, transparent 25%),
+        linear-gradient(45deg, rgba(255, 131, 200, 0.08) 25%, transparent 25%);
+    background-size: 100px 100px;
+    background-color: var(--pink-medium);
+    position: relative;
+    overflow: hidden;
+}
+
+.slide[data-slide="2"] .feature {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* SLIDE 3 - Laranja/Amarelo com polígonos (estático para performance) */
+.slide[data-slide="3"] {
+    background-color: var(--slide-3-primary);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23EED532' points='120 120 60 120 90 90 120 60 120 0 120 0 60 60 0 0 0 60 30 90 60 120 120 120 '/%3E%3C/svg%3E");
+}
+
+.slide[data-slide="3"] .slide-list li::before {
+    color: #fff;
+}
+
+/* SLIDE 4 - Vermelho com polígonos (estático para performance) */
+.slide[data-slide="4"] {
+    background-color: var(--slide-4-primary);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 200 200'%3E%3Cpolygon fill='%23FA4E3A' points='100 0 0 100 100 100 100 200 200 100 200 0'/%3E%3C/svg%3E");
+}
+
+.slide[data-slide="4"] .cta-button {
+    background: var(--cor-botao, #fff);
+    color: white;
+}
+
+/* SLIDE 5 - Rosa pastel com pontos (estático para performance) */
+.slide[data-slide="5"] {
+    background-image: radial-gradient(var(--slide-5-secondary) 7px, transparent 7px), 
+                      radial-gradient(var(--slide-5-secondary) 7px, transparent 7px);
+    background-size: 32px 32px;
+    background-position: 0 0, 16px 16px;
+    background-color: var(--slide-5-primary);
+}
+
+/* SLIDE 6 - Turquesa com padrão complexo (estático para performance) */
+.slide[data-slide="6"] {
+    background: 
+        linear-gradient(45deg, #0000 calc(25%/3), var(--slide-6-secondary) 0 calc(50%/3), #0000 0 calc(250%/3), var(--slide-6-secondary) 0 calc(275%/3), #0000 0),
+        linear-gradient(45deg, var(--slide-6-secondary) calc(25%/3), #0000 0 calc(50%/3), var(--slide-6-secondary) 0 25%, #0000 0 75%, var(--slide-6-secondary) 0 calc(250%/3), #0000 0 calc(275%/3), var(--slide-6-secondary) 0),
+        linear-gradient(-45deg, #0000 calc(25%/3), var(--slide-6-secondary) 0 calc(50%/3), #0000 0 calc(250%/3), var(--slide-6-secondary) 0 calc(275%/3), #0000 0),
+        linear-gradient(-45deg, var(--slide-6-secondary) calc(25%/3), #0000 0 calc(50%/3), var(--slide-6-secondary) 0 25%, #0000 0 75%, var(--slide-6-secondary) 0 calc(250%/3), #0000 0 calc(275%/3), var(--slide-6-secondary) 0) var(--slide-6-primary);
+    background-size: 64px 64px;
+    background-position: 0 0, 32px 32px;
+}
+
+/* SLIDE 7 - Verde com padrão hexagonal (estático para performance) */
+.slide[data-slide="7"] {
+    background:
+        radial-gradient(48px at calc(100% + calc(48px * 0.866)) 50%, var(--slide-7-secondary) 99%, #0000 101%) 0 calc(-5 * 48px/2),
+        radial-gradient(48px at calc(100% + calc(48px * 0.866)) 50%, var(--slide-7-secondary) 99%, #0000 101%) calc(-2 * calc(48px * 0.866)) calc(48px/2),
+        radial-gradient(48px at 100% 50%, var(--slide-7-primary) 99%, #0000 101%) 0 calc(-2 * 48px),
+        radial-gradient(48px, var(--slide-7-secondary) 99%, #0000 101%) calc(48px * 0.866) calc(-5 * 48px/2),
+        radial-gradient(48px, var(--slide-7-primary) 99%, #0000 101%) calc(48px * 0.866) calc(5 * 48px/2),
+        radial-gradient(48px at 100% 100%, var(--slide-7-secondary) 99%, #0000 101%) 0 calc(-1 * 48px),
+        radial-gradient(48px at 0% 50%, var(--slide-7-secondary) 99%, #0000 101%) 0 calc(-4 * 48px),
+        radial-gradient(48px, var(--slide-7-primary) 99%, #0000 101%) calc(-1 * calc(48px * 0.866)) calc(-7 * 48px/2),
+        radial-gradient(48px, var(--slide-7-secondary) 99%, #0000 101%) calc(-1 * calc(48px * 0.866)) calc(-5 * 48px/2),
+        radial-gradient(48px at 100% 50%, var(--slide-7-primary) 99%, #0000 101%) calc(-2 * calc(48px * 0.866)) 48px,
+        radial-gradient(48px, var(--slide-7-secondary) 99%, #0000 101%) calc(-1 * calc(48px * 0.866)) calc(48px/2),
+        radial-gradient(48px, var(--slide-7-primary) 99%, #0000 101%) calc(-1 * calc(48px * 0.866)) calc(48px/-2),
+        radial-gradient(48px, var(--slide-7-secondary) 99%, #0000 101%) 0 calc(-1 * 48px),
+        radial-gradient(48px, var(--slide-7-primary) 99%, #0000 101%) calc(48px * 0.866) calc(48px/-2),
+        radial-gradient(48px, var(--slide-7-secondary) 99%, #0000 101%) calc(48px * 0.866) calc(48px/2) var(--slide-7-primary);
+    background-size: calc(4 * calc(48px * 0.866)) calc(6 * 48px);
+}
+
+/* SLIDE 8 - Roxo escuro com gradiente */
+.slide[data-slide="8"] {
+	background-image:  linear-gradient(30deg, #7B96E5 12%, transparent 12.5%, transparent 87%, #7B96E5 87.5%, #7B96E5), linear-gradient(150deg, #7B96E5 12%, transparent 12.5%, transparent 87%, #7B96E5 87.5%, #7B96E5), linear-gradient(30deg, #7B96E5 12%, transparent 12.5%, transparent 87%, #7B96E5 87.5%, #7B96E5), linear-gradient(150deg, #7B96E5 12%, transparent 12.5%, transparent 87%, #7B96E5 87.5%, #7B96E5), linear-gradient(60deg, #7B96E580 25%, transparent 25.5%, transparent 75%, #7B96E580 75%, #7B96E580), linear-gradient(60deg, #7B96E580 25%, transparent 25.5%, transparent 75%, #7B96E580 75%, #7B96E580);
+	background-size: 96px 168px;
+	background-position: 0 0, 0 0, 48px 84px, 48px 84px, 0 0, 48px 84px;
+	background-color: #6366ED;
+}
+
+/* ==========================================================================
+   ANIMAÇÕES ESPECÍFICAS
+   ========================================================================== */
+
+@keyframes drift {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-28px) rotate(1deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes pulse {
+    0% { filter: saturate(1) brightness(1); }
+    50% { filter: saturate(1.06) brightness(1.06); }
+    100% { filter: saturate(1) brightness(1); }
+}
+
+@keyframes patternShift {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-60px); }
+}
+
+@keyframes slowSlide {
+    0% { background-position: 0 0; }
+    100% { background-position: 200px 200px; }
+}
+
+/* ==========================================================================
+   NAVEGAÇÃO
+   ========================================================================== */
+
+.navigation {
+    position: fixed;
+    bottom: 56px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 20;
+    pointer-events: all;
+    background: transparent;
+    padding: 6px 8px;
+}
+
+.nav-btn {
+    pointer-events: all;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    width: var(--nav-btn-size);
+    height: var(--nav-btn-size);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.18s ease, background 0.18s ease;
+    color: white;
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.nav-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ==========================================================================
+   INDICADORES
+   ========================================================================== */
+
+.slide-indicators {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    pointer-events: all;
+}
+
+.indicator {
+    width: var(--indicator-size);
+    height: var(--indicator-size);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(0.2, 0.9, 0.2, 1);
+    border: 2px solid transparent;
+}
+
+.indicator:hover {
+    background: rgba(255, 255, 255, 0.65);
+    transform: translateY(-2px) scale(1.05);
+}
+
+.indicator.active {
+    background: white;
+    width: var(--indicator-active-width);
+    height: var(--indicator-size);
+    border-radius: 999px;
+}
+
+/* ==========================================================================
+   RESPONSIVO
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .slide h1 {
+        font-size: 2rem;
+    }
+
+    .slide p {
+        font-size: 1rem;
+    }
+
+    .cta-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .navigation {
+        padding: 0 1rem;
+    }
+
+    .nav-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .slide-indicators {
+        right: 1rem;
+    }
+
+    .content-container {
+        left: 50%;
+        transform: translateX(-50%);
+        top: 20%;
+    }
+
+    .slide[data-slide="1"] #drmarkdean {
+        width: 400px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* Content Boxes */
+.content-box,
+.content-box-2 {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    max-width: 580px;
+    height: 150px;
+    color: white;
+    overflow: visible;
+    filter: drop-shadow(0 24px 45px rgba(0, 0, 0, 0.55)) drop-shadow(8px 8px 0 white);
+}
+
+.content-box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    transform: skewX(-16deg);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.content-box-2 {
+    filter: drop-shadow(0 24px 45px rgba(0, 0, 0, 0.55)) drop-shadow(12px 8px 0 white);
+}
+
+.content-box-2::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    transform: skewX(16deg);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.content-box p,
+.content-box-2 p {
+    font-size: 15px;
+    margin: 0;
+}
+
+/* Imagens de conteúdo */
+.content-image-1 {
+    position: absolute;
+    left: -26%;
+    width: 200px;
+    height: auto;
+    transform: rotate(-6deg);
+}
+
+.content-image-2 {
+    position: absolute;
+    right: -10%;
+    width: 200px;
+    height: auto;
+    transform: rotate(6deg);
+}
+
+/* Imagem principal (Dr. Mark Dean) - escopo apenas para slide 1 */
+.slide[data-slide="1"] #drmarkdean {
+    position: absolute;
+    bottom: 0;
+    left: -32px;
+    width: 720px;
+    height: auto;
+    z-index: 1000;
+    filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.45));
+}
+
+.slide[data-slide="2"] #ninasilva {
+    position: absolute;
+    bottom: 0;
+    left: 128px;
+    width: 490px;
+    height: auto;
+    z-index: 1000;
+    filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.45));
+}
+
+.slide[data-slide="3"] #drclarenceellis {
+    position: absolute;
+    bottom: 0;
+    left: 136px;
+    width: 550px;
+    height: auto;
+    z-index: 1000;
+    filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.45));
+}
+
+.slide[data-slide="4"] #dorothyvaughan {
+    position: absolute;
+    bottom: 0;
+    left: 140px;
+    width: 520px;
+    height: auto;
+    z-index: 1000;
+    filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.45));
+}
+
+.slide[data-slide="5"] #jerrylawson {
+    position: absolute;
+    bottom: 0;
+    left: 160px;
+    width: 410px;
+    height: auto;
+    z-index: 1000;
+    filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.45));
+}
+
+
+.slide[data-slide="6"] #maryjackson {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    width: 820px;
+    height: auto;
+    z-index: 1000;
+    filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.45));
+}
+
+.slide[data-slide="7"] #adrianabarbosa {
+    position: absolute;
+    bottom: 0;
+    left: 90px;
+    width: 620px;
+    height: auto;
+    z-index: 1000;
+    filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.45));
+}
+
+.slide[data-slide="8"] #enedinaalvesmarques {
+    position: absolute;
+    bottom: 0;
+    left: 160px;
+    width: 420px;
+    height: auto;
+    z-index: 1000;
+    filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.45));
+}
